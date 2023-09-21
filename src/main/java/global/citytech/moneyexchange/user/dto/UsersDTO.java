@@ -1,13 +1,12 @@
 package global.citytech.moneyexchange.user.dto;
 
-import global.citytech.moneyexchange.user.model.UserRoleEnum;
+import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
 @Introspected
 public class UsersDTO {
-
     private int id;
     private String firstName;
     private String lastName;
@@ -15,9 +14,11 @@ public class UsersDTO {
     private String email;
     private String password;
     private String citizenship;
-    private UserRoleEnum userRoleEnum;
+    private StatusAndRoleEnum userRoleEnum;
     private String checkStatus;
     private String checkBlacklist;
+
+    private double availableBalance;
 
     public int getId() {
         return id;
@@ -91,20 +92,28 @@ public class UsersDTO {
         this.citizenship = citizenship;
     }
 
-    public UserRoleEnum getUserRole() {
+    public StatusAndRoleEnum getUserRole() {
         return userRoleEnum;
     }
 
-    public void setUserRole(UserRoleEnum userRoleEnum) {
+    public void setUserRole(StatusAndRoleEnum userRoleEnum) {
         this.userRoleEnum = userRoleEnum;
+    }
+
+    public double getAvailableBalance() {
+        return availableBalance;
+    }
+
+    public void setAvailableBalance(double availableBalance) {
+        this.availableBalance = availableBalance;
     }
 
     public UsersDTO(){};
 
     public UsersDTO(int id, String firstName, String lastName, String userName,
                     String email, String password, String citizenship,
-                    UserRoleEnum userRoleEnum, String checkStatus, String checkBlacklist
-    ) {
+                    StatusAndRoleEnum userRoleEnum, String checkStatus, String checkBlacklist,double AvailableBalance)
+    {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -115,5 +124,6 @@ public class UsersDTO {
         this.userRoleEnum = userRoleEnum;
         this.checkStatus = checkStatus;
         this.checkBlacklist = checkBlacklist;
+        this.availableBalance = availableBalance;
     }
 }
