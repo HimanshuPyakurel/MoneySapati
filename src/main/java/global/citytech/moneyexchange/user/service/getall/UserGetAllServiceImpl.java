@@ -18,8 +18,8 @@ public class UserGetAllServiceImpl implements UserGetAllService {
     }
 
     @Override
-    public List<Users> getAllUsers(int id) {
-        Optional<Users> userDto = userRepository.findById(id);
+    public List<Users> getAllUsers(UserGetAllRequest request) {
+        Optional<Users> userDto = userRepository.findById(request.getUserId());
 
         if (userDto.isPresent()) {
             Users users = userDto.get();
