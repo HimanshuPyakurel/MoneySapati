@@ -92,6 +92,7 @@ public class UsersDTO {
         this.citizenship = citizenship;
     }
 
+
     public StatusAndRoleEnum getUserRole() {
         return userRoleEnum;
     }
