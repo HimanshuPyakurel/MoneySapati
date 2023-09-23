@@ -1,5 +1,6 @@
 package global.citytech.moneyexchange.user.service.signup;
 
+import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
 import global.citytech.moneyexchange.exception.CustomException;
 import global.citytech.moneyexchange.user.dto.UsersDTO;
 import global.citytech.moneyexchange.user.repository.Users;
@@ -36,18 +37,24 @@ public class UserSignupServiceImpl implements UserSignupService {
         users.setCitizenship(usersDto.getCitizenship());
         users.setUserRole(usersDto.getUserRole());
 
-        this.availableBalanceForLenderAndBorrower(usersDto);
+        if("LENDER".equalsIgnoreCase(usersDto.getUserRole().name())){
+            users.setAvailableBalance(usersDto.getAvailableBalance());
+        } else users.setAvailableBalance(0);
+
         return this.userRepository.save(users);
     }
 
     public void validateRequest(UsersDTO userDto) {
+        List<Users> rootAdminUser = this.userRepository.findByUserRole(StatusAndRoleEnum.ADMIN);
         Optional<Users> existingUserName = this.userRepository.findByEmail(userDto.getEmail());
+
         List<Users> existingAdminRole = this.userRepository.findByUserRole(userDto.getUserRole());
 
         if (existingUserName.isPresent()) {
             throw new CustomException("User Email already exists");
         }
-        if ("Admin".equalsIgnoreCase(existingAdminRole.get(0).getUserRole().name())){
+        Users existingAdmin = existingAdminRole.get(0);
+        if (rootAdminUser.equals(existingAdmin.getUserRole().name())){
             throw new CustomException("Admin already exists");
         }
     }
