@@ -1,8 +1,8 @@
 package global.citytech.moneyexchange.user.controller.login;
 
+import global.citytech.moneyexchange.response.CustomResponse;
 import global.citytech.moneyexchange.user.service.login.UserLoginService;
 import global.citytech.moneyexchange.user.dto.UsersDTO;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -19,8 +19,9 @@ public class UserLoginController {
     }
 
     @Post("/login")
-    public HttpResponse<String> loginUser(@Body UsersDTO usersDto){
-        return userLoginService.loginUser(usersDto);
+    public CustomResponse loginUser(@Body UsersDTO usersDto){
+        userLoginService.loginUser(usersDto);
+        return new CustomResponse("Successfully Login",true);
     }
 
 }

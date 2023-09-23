@@ -1,8 +1,8 @@
 package global.citytech.moneyexchange.user.controller.signup;
 
+import global.citytech.moneyexchange.response.CustomResponse;
 import global.citytech.moneyexchange.user.dto.UsersDTO;
 import global.citytech.moneyexchange.user.service.signup.UserSignupService;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -19,11 +19,11 @@ public class UserSignupController {
     }
 
     @Post("/signup")
-    public HttpResponse<String> postSignup(@Body UsersDTO usersDto){
+    public CustomResponse postSignup(@Body UsersDTO usersDto){
         Random random=new Random();
         usersDto.setId(random.nextInt(10000));
         userSignupService.signup(usersDto);
-        return HttpResponse.ok("User Signup Successful");
+        return new CustomResponse("User Signup Successful",true);
     }
 
 }

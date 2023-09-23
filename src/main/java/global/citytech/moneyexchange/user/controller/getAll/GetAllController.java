@@ -1,24 +1,26 @@
 package global.citytech.moneyexchange.user.controller.getAll;
 
-import global.citytech.moneyexchange.user.model.Users;
-import global.citytech.moneyexchange.user.service.getall.GetAllService;
+import global.citytech.moneyexchange.user.repository.Users;
+import global.citytech.moneyexchange.user.service.getall.UserGetAllRequest;
+import global.citytech.moneyexchange.user.service.getall.UserGetAllService;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
+
 import java.util.List;
 
 @Controller("/user")
 public class GetAllController {
-    private GetAllService getAllService;
+    private UserGetAllService userGetAllService;
 
     @Inject
-    public GetAllController(GetAllService getAllService){
-        this.getAllService=getAllService;
+    public GetAllController(UserGetAllService userGetAllService) {
+        this.userGetAllService = userGetAllService;
     }
 
-    @Get("/get/{id}")
-    public List<Users> getAllUsers(@PathVariable int id) {
-        return (List<Users>) getAllService.getAllUsers(id);
+    @Post("/get")
+    public List<Users> getAllUsers(@Body UserGetAllRequest request) {
+        return userGetAllService.getAllUsers(request);
     }
 }
