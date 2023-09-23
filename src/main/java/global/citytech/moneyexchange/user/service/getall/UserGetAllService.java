@@ -4,6 +4,6 @@ import global.citytech.moneyexchange.user.repository.Users;
 import java.util.List;
 
 public interface UserGetAllService {
-    List<Users> getAllUsers(int id);
+    List<Users> getAllUsers(UserGetAllRequest request);
 
 }
