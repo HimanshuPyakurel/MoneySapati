@@ -2,6 +2,7 @@ package global.citytech.moneyexchange.user.service.signup;
 
 import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
 import global.citytech.moneyexchange.exception.CustomException;
+import global.citytech.moneyexchange.response.CustomResponse;
 import global.citytech.moneyexchange.user.dto.UsersDTO;
 import global.citytech.moneyexchange.user.repository.Users;
 import global.citytech.moneyexchange.user.repository.UserRepository;
@@ -20,14 +21,19 @@ public class UserSignupServiceImpl implements UserSignupService {
     }
 
     @Override
-    public Users signup(UsersDTO usersDto) {
+    public CustomResponse signup(UsersDTO usersDto) {
+        this.validateRequest(usersDto);
         Users users = new Users();
 
-        this.validateRequest(usersDto);
-        this.checkAdminForStatus(usersDto);
+        if ("ADMIN".equalsIgnoreCase(usersDto.getUserRole().toString())){
+            users.setCheckStatus(StatusAndRoleEnum.VERIFIED.name());
+            users.setCheckBlacklist(StatusAndRoleEnum.VERIFIED.name());
+        }
+        else {
+            users.setCheckStatus(StatusAndRoleEnum.PENDING.name());
+            users.setCheckBlacklist(StatusAndRoleEnum.PENDING.name());
+        }
 
-        users.setCheckStatus(usersDto.getCheckStatus());
-        users.setCheckBlacklist(usersDto.getCheckBlacklist());
         users.setPassword(DigestUtils.md5DigestAsHex(usersDto.getPassword().getBytes()));
         users.setUserName(usersDto.getUserName());
         users.setId(usersDto.getId());
@@ -41,42 +47,29 @@ public class UserSignupServiceImpl implements UserSignupService {
             users.setAvailableBalance(usersDto.getAvailableBalance());
         } else users.setAvailableBalance(0);
 
-        return this.userRepository.save(users);
+
+        this.userRepository.save(users);
+
+        return new CustomResponse("Successfully Signup",true);
     }
 
     public void validateRequest(UsersDTO userDto) {
-        List<Users> rootAdminUser = this.userRepository.findByUserRole(StatusAndRoleEnum.ADMIN);
-        Optional<Users> existingUserName = this.userRepository.findByEmail(userDto.getEmail());
 
-        List<Users> existingAdminRole = this.userRepository.findByUserRole(userDto.getUserRole());
+        Optional<Users> existingUserName = this.userRepository.findByEmail(userDto.getEmail());
 
         if (existingUserName.isPresent()) {
             throw new CustomException("User Email already exists");
         }
-        Users existingAdmin = existingAdminRole.get(0);
-        if (rootAdminUser.equals(existingAdmin.getUserRole().name())){
-            throw new CustomException("Admin already exists");
-        }
-    }
-    public void checkAdminForStatus(UsersDTO usersDTO){
-        if ("ADMIN".equalsIgnoreCase(usersDTO.getUserRole().toString())){
-            usersDTO.setCheckStatus("Verified");
-            usersDTO.setCheckBlacklist("Verified");
-        }
-        else {
-            usersDTO.setCheckStatus("Pending");
-            usersDTO.setCheckBlacklist("Pending");
-        }
-    }
 
-    public void availableBalanceForLenderAndBorrower(UsersDTO usersDTO){
-        Users users =new Users();
-        if("LENDER".equalsIgnoreCase(usersDTO.getUserRole().name())){
-            users.setAvailableBalance(usersDTO.getAvailableBalance());
-        }
-        else users.setAvailableBalance(0);
-    }
+        if ("ADMIN".equalsIgnoreCase(userDto.getUserRole().name())){
+            List<Users> rootAdminUser = this.userRepository.findByUserRole(StatusAndRoleEnum.ADMIN);
 
+            if(!rootAdminUser.isEmpty()){
+                throw new CustomException("Admin already exists");
+            }
+        }
+
+    }
 
 }
 
