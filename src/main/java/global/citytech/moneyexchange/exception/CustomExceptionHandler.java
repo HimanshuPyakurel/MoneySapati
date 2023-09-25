@@ -12,8 +12,6 @@ import jakarta.inject.Singleton;
 @Requires(classes = {CustomException.class, ExceptionHandler.class})
 public class CustomExceptionHandler implements ExceptionHandler<CustomException, HttpResponse<String>> {
 
-    private String message;
-
     @Override
     public HttpResponse<String> handle(HttpRequest request, CustomException exception) {
         return HttpResponse.badRequest().body(exception.getMessage());
