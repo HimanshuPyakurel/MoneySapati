@@ -27,7 +27,7 @@ public class RejectUserServiceImpl implements RejectUserService{
         if (userList.isPresent() && userList.get().getPassword().equals(checkPassword)) {
             if (userList.get().getUserRole() == StatusAndRoleEnum.ADMIN) {
                 this.validateRequest(rejectUserRequest.getUserId());
-                return new CustomResponse("User rejected", true);
+                return new CustomResponse("User rejected",true);
             } else {
                 throw new CustomException("Only Admin User can verify the user details");
             }
