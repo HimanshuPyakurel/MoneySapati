@@ -1,6 +1,7 @@
 package global.citytech.moneyexchange.user.controller.signup;
 
 import global.citytech.moneyexchange.response.CustomResponse;
+import global.citytech.moneyexchange.response.RestResponse;
 import global.citytech.moneyexchange.user.dto.UsersDTO;
 import global.citytech.moneyexchange.user.service.signup.UserSignupService;
 import io.micronaut.http.annotation.Body;
