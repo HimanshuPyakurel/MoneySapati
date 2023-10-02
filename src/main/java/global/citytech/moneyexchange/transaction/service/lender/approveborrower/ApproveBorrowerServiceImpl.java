@@ -10,6 +10,8 @@ import global.citytech.moneyexchange.transaction.repository.transaction.Transact
 import global.citytech.moneyexchange.user.repository.UserRepository;
 import global.citytech.moneyexchange.user.repository.Users;
 import jakarta.inject.Inject;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -33,49 +35,63 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
 
 //        Transaction transaction=new Transaction();
         if(transactionEntities.isPresent()){
-            if(("REJECTED".equalsIgnoreCase(transactionEntities.get().getTransactionStatus()))) {
+            if (("REJECTED".equalsIgnoreCase(transactionEntities.get().getTransactionStatus()))) {
                 throw new CustomException("Rejected borrower");
-            }
-            else if((transactionEntities.isEmpty() || "COMPLETE".equalsIgnoreCase(transactionEntities.get().getTransactionStatus()))){
+            } else if ((transactionEntities.isEmpty() || "COMPLETE".equalsIgnoreCase(transactionEntities.get().getTransactionStatus()))) {
                 throw new CustomException("Transaction is already completed");
-            }
-            else {
+            } else {
                 Transaction transaction = transactionEntities.get();
-                transaction.setId(request.getTransactionId());;
+                transaction.setId(request.getTransactionId());
+                ;
                 transaction.setBorrowerId(request.getBorrowerId());
                 transaction.setLenderId(request.getLenderId());
                 transaction.setTransactionStatus(StatusAndRoleEnum.UNPAID.name());
 
+                this.CashDetailsUpdate(transaction);
                 transactionRepository.update(transaction);
-                this.CashDetailsUpdate(request,transaction);
-                return new CustomResponse("Successfully approved",true);
+
+                return new CustomResponse("Successfully approved", true);
             }
         }
         else {throw new CustomException("Transaction id not present");}
     }
 
-    private void CashDetailsUpdate(ApprovedTransactionRequest request,Transaction transaction) {
+    private void CashDetailsUpdate(Transaction transaction) {
         CashDetails updateCashDetails = new CashDetails();
+        Optional<Users> borrower = userRepository.findById(transaction.getBorrowerId());
         Optional<Users> lender = userRepository.findById(transaction.getLenderId());
 
         this.validateCashDetails(transaction);
 
-        // transaction must also be fluctuate in Users table
 
-        Random random=new Random();
+        // cash flow detail must be update as well
+        Random random = new Random();
         updateCashDetails.setId(random.nextInt(10000));
 
-        double interestRateAmount = transaction.getInterestRate()/100 * transaction.getRequestAmount() * transaction.getBorrowingPeriod()/365;
+        double interestRateAmount = transaction.getInterestRate() / 100 * transaction.getRequestAmount() * transaction.getBorrowingPeriod() / 365;
 
         updateCashDetails.setBorrowerId(transaction.getBorrowerId());
         updateCashDetails.setLenderId(transaction.getLenderId());
 
-        updateCashDetails.setBorrowerAmount(Math.floor(transaction.getRequestAmount()+interestRateAmount));
+        updateCashDetails.setBorrowerAmountToPay(Math.floor(transaction.getRequestAmount() + interestRateAmount));
 
         updateCashDetails.setStatus(StatusAndRoleEnum.UNPAID.name());
-        updateCashDetails.setLenderAmount(lender.get().getAvailableBalance()-transaction.getRequestAmount());
+        updateCashDetails.setTotalLenderAvailableAmount(lender.get().getAvailableBalance() - transaction.getRequestAmount());
 
         cashDetailsRepository.save(updateCashDetails);
+
+        //Update User table as well
+        if (borrower.isPresent()) {
+            Users userUpdate = borrower.get();
+            userUpdate.setAvailableBalance(transaction.getRequestAmount());
+            userRepository.update(userUpdate);
+        }
+        if (lender.isPresent()) {
+            Users userUpdate = lender.get();
+            userUpdate.setAvailableBalance(lender.get().getAvailableBalance() - transaction.getRequestAmount());
+            userRepository.update(userUpdate);
+        } else throw new CustomException("User not found");
+
     }
 
     public void validateCashDetails(Transaction transaction){
@@ -83,7 +99,7 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
         Optional<Users> borrower =userRepository.findById(transaction.getBorrowerId());
         Optional<Transaction> transactionLender = transactionRepository.findById(transaction.getLenderId());
         Optional<Transaction> transactionBorrower = transactionRepository.findById(transaction.getLenderId());
-        Optional<CashDetails> cashDetailsBorrower = cashDetailsRepository.findByBorrowerId(transaction.getBorrowerId());
+        List<CashDetails> cashDetailsBorrower = cashDetailsRepository.findByBorrowerId(transaction.getBorrowerId());
 
         if(lender.isEmpty()){
             throw new CustomException("Invalid Lender id. Please check id number.");
@@ -91,21 +107,25 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
         if(borrower.isEmpty()){
             throw new CustomException("Invalid Borrower id. Please check id number.");
         }
-        if (!("Lender".equalsIgnoreCase(lender.get().getUserRole().name()))){
+        if (!("Lender".equalsIgnoreCase(lender.get().getUserRole().name()))) {
             throw new CustomException("Lender id must be belong to lender user only");
         }
-        if (!("Borrower".equalsIgnoreCase(borrower.get().getUserRole().name()))){
+        if (!("Borrower".equalsIgnoreCase(borrower.get().getUserRole().name()))) {
             throw new CustomException("Borrower id must be belong to borrower user only");
         }
-        if(transactionLender.isPresent() || transactionBorrower.isPresent()){
+        if (transactionLender.isPresent() || transactionBorrower.isPresent()) {
             throw new CustomException("Lender and borrower is already present");
         }
-        if(cashDetailsBorrower.isPresent() && "UNPAID".equalsIgnoreCase(cashDetailsBorrower.get().getStatus())){
-            throw new CustomException("Borrower is already present and the status is unpaid. Need to pay all due first");
+        if (!cashDetailsBorrower.isEmpty() && "UNPAID".equalsIgnoreCase(cashDetailsBorrower.get(0).getStatus())) {
+            throw new CustomException("Borrower status is unpaid");
         }
-        if(cashDetailsBorrower.isPresent() && "PARTIAL_PAID".equalsIgnoreCase(cashDetailsBorrower.get().getStatus())){
-            throw new CustomException("Borrower is already present and the status is partially paid. Need to pay all due first");
+        if (!cashDetailsBorrower.isEmpty() && "PARTIAL_PAID".equalsIgnoreCase(cashDetailsBorrower.get(0).getStatus())) {
+            throw new CustomException("Borrower status is partially paid");
         }
+        if (!cashDetailsBorrower.isEmpty() && "REJECTED".equalsIgnoreCase(cashDetailsBorrower.get(0).getStatus())) {
+            throw new CustomException("Borrower is already rejected");
+        }
+
 
     }
 
