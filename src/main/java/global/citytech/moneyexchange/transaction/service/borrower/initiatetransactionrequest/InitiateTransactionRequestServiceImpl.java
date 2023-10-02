@@ -9,6 +9,7 @@ import global.citytech.moneyexchange.user.repository.UserRepository;
 import global.citytech.moneyexchange.user.repository.Users;
 import jakarta.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -46,7 +47,7 @@ public class InitiateTransactionRequestServiceImpl implements InitiateTransactio
     public void validateRequest(InitiateTransactionRequest validateRequest) {
         Optional<Users> borrower = userRepository.findById(validateRequest.getBorrowerId());
         Optional<Users> lender = userRepository.findById(validateRequest.getLenderId());
-        Optional<Transaction> previousBorrower = transactionRepository.findByBorrowerId(validateRequest.getBorrowerId());
+        List<Transaction> previousBorrower = transactionRepository.findByBorrowerId(validateRequest.getBorrowerId());
 
         if (borrower.isEmpty() ) {
             throw new CustomException("Borrower not found. Enter borrower id properly");
@@ -72,16 +73,16 @@ public class InitiateTransactionRequestServiceImpl implements InitiateTransactio
         if (!("BORROWER".equalsIgnoreCase(borrower.get().getUserRole().name()))) {
             throw new CustomException("Borrower id must be of borrower role User");
         }
-        if(previousBorrower.isPresent() && "PENDING".equalsIgnoreCase(previousBorrower.get().getTransactionStatus())){
+        if(!previousBorrower.isEmpty() && "PENDING".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
             throw new CustomException("Borrower have already initiated amounts with Lender");
         }
-        if(previousBorrower.isPresent() && "UNPAID".equalsIgnoreCase(previousBorrower.get().getTransactionStatus())){
-            throw new CustomException("Borrower have already initiated amounts with Lender");
+        if(!previousBorrower.isEmpty() && "UNPAID".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
+            throw new CustomException("Borrower status is still unpaid");
         }
-        if(previousBorrower.isPresent() && "PARTIAL_PAID".equalsIgnoreCase(previousBorrower.get().getTransactionStatus())){
-            throw new CustomException("Borrower have already initiated amounts with Lender");
+        if(!previousBorrower.isEmpty() && "PARTIAL_PAID".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
+            throw new CustomException("Borrower status is still partial paid");
         }
-        if(previousBorrower.isPresent() && "REJECTED".equalsIgnoreCase(previousBorrower.get().getTransactionStatus())){
+        if(!previousBorrower.isEmpty() && "REJECTED".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
             throw new CustomException("Borrower is rejected");
         }
 
