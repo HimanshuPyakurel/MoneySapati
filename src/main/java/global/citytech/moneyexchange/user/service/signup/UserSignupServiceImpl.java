@@ -53,7 +53,7 @@ public class UserSignupServiceImpl implements UserSignupService {
         return new CustomResponse("Successfully Signup",true);
     }
 
-    public void validateRequest(UsersDTO userDto) {
+    private void validateRequest(UsersDTO userDto) {
 
         Optional<Users> existingUserName = this.userRepository.findByEmail(userDto.getEmail());
 
