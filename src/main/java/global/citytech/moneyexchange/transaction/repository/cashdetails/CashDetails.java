@@ -14,20 +14,20 @@ public class CashDetails {
     private int id;
     private int borrowerId;
     private int lenderId;
-    private double borrowerAmount;
-    private double lenderAmount;
-    private String Status;
+    private double borrowerAmountToPay;
+    private double totalLenderAvailableAmount;
+    private String status;
 
     public CashDetails() {};
 
-    public CashDetails(int id, int borrowerId, int lenderId, double borrowerAmount,
-                       double lenderAmount, String status) {
+    public CashDetails(int id, int borrowerId, int lenderId,
+                       double borrowerAmountToPay, double totalLenderAvailableAmount, String status) {
         this.id = id;
         this.borrowerId = borrowerId;
         this.lenderId = lenderId;
-        this.borrowerAmount = borrowerAmount;
-        this.lenderAmount = lenderAmount;
-        Status = status;
+        this.borrowerAmountToPay = borrowerAmountToPay;
+        this.totalLenderAvailableAmount = totalLenderAvailableAmount;
+        this.status = status;
     }
 
     public int getId() {
@@ -54,27 +54,27 @@ public class CashDetails {
         this.lenderId = lenderId;
     }
 
-    public double getBorrowerAmount() {
-        return borrowerAmount;
+    public double getBorrowerAmountToPay() {
+        return borrowerAmountToPay;
     }
 
-    public void setBorrowerAmount(double borrowerAmount) {
-        this.borrowerAmount = borrowerAmount;
+    public void setBorrowerAmountToPay(double borrowerAmountToPay) {
+        this.borrowerAmountToPay = borrowerAmountToPay;
     }
 
-    public double getLenderAmount() {
-        return lenderAmount;
+    public double getTotalLenderAvailableAmount() {
+        return totalLenderAvailableAmount;
     }
 
-    public void setLenderAmount(double lenderAmount) {
-        this.lenderAmount = lenderAmount;
+    public void setTotalLenderAvailableAmount(double totalLenderAvailableAmount) {
+        this.totalLenderAvailableAmount = totalLenderAvailableAmount;
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(String status) {
-        Status = status;
+        this.status = status;
     }
 }
