@@ -1,8 +1,8 @@
 package global.citytech.moneyexchange.admin.service.rejectuser;
 
-import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
-import global.citytech.moneyexchange.exception.CustomException;
-import global.citytech.moneyexchange.response.CustomResponse;
+import global.citytech.moneyexchange.platform.constraints.StatusAndRoleEnum;
+import global.citytech.moneyexchange.platform.exception.CustomException;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
 import global.citytech.moneyexchange.user.repository.UserRepository;
 import global.citytech.moneyexchange.user.repository.Users;
 import jakarta.inject.Inject;
@@ -29,13 +29,13 @@ public class RejectUserServiceImpl implements RejectUserService{
                 this.validateRequest(rejectUserRequest.getUserId());
                 return new CustomResponse("User rejected",true);
             } else {
-                throw new CustomException("Only Admin User can verify the user details");
+                throw new CustomException(400,"Only Admin User can verify the user details");
             }
         }
-        throw new CustomException("Invalid Admin UserName or Password");
+        throw new CustomException(400,"Invalid Admin UserName or Password");
     }
 
-    public CustomResponse validateRequest(int id){
+    private CustomResponse validateRequest(int id){
         Optional<Users> user = userRepository.findById(id);
         if(user.isPresent()){
             user.get().setCheckStatus("Rejected");
@@ -43,7 +43,7 @@ public class RejectUserServiceImpl implements RejectUserService{
             userRepository.update(user.get());
             return new CustomResponse("User Successfully Validated",true);
         }
-        throw  new CustomException("User not found");
+        throw  new CustomException(400,"User not found");
     }
 
 
