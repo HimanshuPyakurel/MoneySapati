@@ -2,7 +2,7 @@ package global.citytech.moneyexchange.admin.controller.verifyusercontroller;
 
 import global.citytech.moneyexchange.admin.service.verifyuser.VerifyUserRequest;
 import global.citytech.moneyexchange.admin.service.verifyuser.VerifyUserService;
-import global.citytech.moneyexchange.response.CustomResponse;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 
