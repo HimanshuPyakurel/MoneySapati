@@ -1,8 +1,8 @@
 package global.citytech.moneyexchange.admin.service.verifyuser;
 
-import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
-import global.citytech.moneyexchange.exception.CustomException;
-import global.citytech.moneyexchange.response.CustomResponse;
+import global.citytech.moneyexchange.platform.constraints.StatusAndRoleEnum;
+import global.citytech.moneyexchange.platform.exception.CustomException;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
 import global.citytech.moneyexchange.user.repository.Users;
 import global.citytech.moneyexchange.user.repository.UserRepository;
 import jakarta.inject.Inject;
@@ -25,24 +25,24 @@ public class VerifyUserServiceImpl implements VerifyUserService {
         String checkPassword = DigestUtils.md5DigestAsHex(verifyUserRequest.getAdminPassword().getBytes());
 
         if(userList.isPresent() && userList.get().getPassword().equals(checkPassword)) {
-            if (userList.get().getUserRole() == StatusAndRoleEnum.ADMIN) {
+            if ("ADMIN".equalsIgnoreCase(userList.get().getUserRole().name())) {
                 this.validateRequest(verifyUserRequest.getUserId());
                 return new CustomResponse("User status update successfully",true);
             } else {
-                throw new CustomException("Only Admin User can verify the user details");
+                throw new CustomException(400,"Only Admin User can verify the user details");
             }
         }
-        throw new CustomException("Invalid Admin UserName or Password");
+        throw new CustomException(400,"Invalid Admin UserName or Password");
     }
 
-    public CustomResponse validateRequest(int id){
+    private CustomResponse validateRequest(int id){
         Optional<Users> user = userRepository.findById(id);
         if(user.isPresent()){
-            user.get().setCheckStatus("Verified");
-            user.get().setCheckBlacklist("Verified");
+            user.get().setCheckStatus(StatusAndRoleEnum.VERIFIED.name());
+            user.get().setCheckBlacklist(StatusAndRoleEnum.VERIFIED.name());
             userRepository.update(user.get());
             return new CustomResponse("User Successfully Validated",true);
         }
-        throw  new CustomException("User not found");
+        throw  new CustomException(400,"User not found");
     }
 }
