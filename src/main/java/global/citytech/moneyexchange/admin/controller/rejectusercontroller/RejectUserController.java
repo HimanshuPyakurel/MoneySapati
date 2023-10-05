@@ -2,7 +2,7 @@ package global.citytech.moneyexchange.admin.controller.rejectusercontroller;
 
 import global.citytech.moneyexchange.admin.service.rejectuser.RejectUserRequest;
 import global.citytech.moneyexchange.admin.service.rejectuser.RejectUserService;
-import global.citytech.moneyexchange.response.CustomResponse;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
