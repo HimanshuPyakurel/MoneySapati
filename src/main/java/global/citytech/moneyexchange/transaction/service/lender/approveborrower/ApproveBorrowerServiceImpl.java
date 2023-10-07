@@ -1,8 +1,8 @@
 package global.citytech.moneyexchange.transaction.service.lender.approveborrower;
 
-import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
-import global.citytech.moneyexchange.exception.CustomException;
-import global.citytech.moneyexchange.response.CustomResponse;
+import global.citytech.moneyexchange.platform.constraints.StatusAndRoleEnum;
+import global.citytech.moneyexchange.platform.exception.CustomException;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
 import global.citytech.moneyexchange.transaction.repository.cashdetails.CashDetails;
 import global.citytech.moneyexchange.transaction.repository.cashdetails.CashDetailsRepository;
 import global.citytech.moneyexchange.transaction.repository.transaction.Transaction;
@@ -11,6 +11,7 @@ import global.citytech.moneyexchange.user.repository.UserRepository;
 import global.citytech.moneyexchange.user.repository.Users;
 import jakarta.inject.Inject;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -36,9 +37,9 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
 //        Transaction transaction=new Transaction();
         if(transactionEntities.isPresent()){
             if (("REJECTED".equalsIgnoreCase(transactionEntities.get().getTransactionStatus()))) {
-                throw new CustomException("Rejected borrower");
+                throw new CustomException(400,"Rejected borrower");
             } else if ((transactionEntities.isEmpty() || "COMPLETE".equalsIgnoreCase(transactionEntities.get().getTransactionStatus()))) {
-                throw new CustomException("Transaction is already completed");
+                throw new CustomException(400,"Transaction is already completed");
             } else {
                 Transaction transaction = transactionEntities.get();
                 transaction.setId(request.getTransactionId());
@@ -53,7 +54,7 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
                 return new CustomResponse("Successfully approved", true);
             }
         }
-        else {throw new CustomException("Transaction id not present");}
+        else {throw new CustomException(400,"Transaction id not present");}
     }
 
     private void CashDetailsUpdate(Transaction transaction) {
@@ -76,6 +77,7 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
         updateCashDetails.setBorrowerAmountToPay(Math.floor(transaction.getRequestAmount() + interestRateAmount));
 
         updateCashDetails.setStatus(StatusAndRoleEnum.UNPAID.name());
+        updateCashDetails.setApprovedAt(LocalDateTime.now());
         updateCashDetails.setTotalLenderAvailableAmount(lender.get().getAvailableBalance() - transaction.getRequestAmount());
 
         cashDetailsRepository.save(updateCashDetails);
@@ -90,11 +92,11 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
             Users userUpdate = lender.get();
             userUpdate.setAvailableBalance(lender.get().getAvailableBalance() - transaction.getRequestAmount());
             userRepository.update(userUpdate);
-        } else throw new CustomException("User not found");
+        } else throw new CustomException(400,"User not found");
 
     }
 
-    public void validateCashDetails(Transaction transaction){
+    private void validateCashDetails(Transaction transaction){
         Optional<Users> lender = userRepository.findById(transaction.getLenderId());
         Optional<Users> borrower =userRepository.findById(transaction.getBorrowerId());
         Optional<Transaction> transactionLender = transactionRepository.findById(transaction.getLenderId());
@@ -102,28 +104,28 @@ public class ApproveBorrowerServiceImpl implements ApproveBorrowerService {
         List<CashDetails> cashDetailsBorrower = cashDetailsRepository.findByBorrowerId(transaction.getBorrowerId());
 
         if(lender.isEmpty()){
-            throw new CustomException("Invalid Lender id. Please check id number.");
+            throw new CustomException(400,"Invalid Lender id. Please check id number.");
         }
         if(borrower.isEmpty()){
-            throw new CustomException("Invalid Borrower id. Please check id number.");
+            throw new CustomException(400,"Invalid Borrower id. Please check id number.");
         }
-        if (!("Lender".equalsIgnoreCase(lender.get().getUserRole().name()))) {
-            throw new CustomException("Lender id must be belong to lender user only");
+        if (!("LENDER".equalsIgnoreCase(lender.get().getUserRole().name()))) {
+            throw new CustomException(400,"Lender id must be belong to lender user only");
         }
-        if (!("Borrower".equalsIgnoreCase(borrower.get().getUserRole().name()))) {
-            throw new CustomException("Borrower id must be belong to borrower user only");
+        if (!("BORROWER".equalsIgnoreCase(borrower.get().getUserRole().name()))) {
+            throw new CustomException(400,"Borrower id must be belong to borrower user only");
         }
         if (transactionLender.isPresent() || transactionBorrower.isPresent()) {
-            throw new CustomException("Lender and borrower is already present");
+            throw new CustomException(400,"Lender and borrower is already present");
         }
         if (!cashDetailsBorrower.isEmpty() && "UNPAID".equalsIgnoreCase(cashDetailsBorrower.get(0).getStatus())) {
-            throw new CustomException("Borrower status is unpaid");
+            throw new CustomException(400,"Borrower status is unpaid");
         }
         if (!cashDetailsBorrower.isEmpty() && "PARTIAL_PAID".equalsIgnoreCase(cashDetailsBorrower.get(0).getStatus())) {
-            throw new CustomException("Borrower status is partially paid");
+            throw new CustomException(400,"Borrower status is partially paid");
         }
         if (!cashDetailsBorrower.isEmpty() && "REJECTED".equalsIgnoreCase(cashDetailsBorrower.get(0).getStatus())) {
-            throw new CustomException("Borrower is already rejected");
+            throw new CustomException(400,"Borrower is already rejected");
         }
 
 
