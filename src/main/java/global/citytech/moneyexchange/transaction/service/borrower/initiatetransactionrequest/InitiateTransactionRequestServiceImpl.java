@@ -1,7 +1,7 @@
 package global.citytech.moneyexchange.transaction.service.borrower.initiatetransactionrequest;
 
-import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
-import global.citytech.moneyexchange.exception.CustomException;
+import global.citytech.moneyexchange.platform.constraints.StatusAndRoleEnum;
+import global.citytech.moneyexchange.platform.exception.CustomException;
 import global.citytech.moneyexchange.transaction.repository.cashdetails.CashDetailsRepository;
 import global.citytech.moneyexchange.transaction.repository.transaction.Transaction;
 import global.citytech.moneyexchange.transaction.repository.transaction.TransactionRepository;
@@ -44,46 +44,49 @@ public class InitiateTransactionRequestServiceImpl implements InitiateTransactio
         return transactionRepository.save(transaction);
     }
 
-    public void validateRequest(InitiateTransactionRequest validateRequest) {
+    private void validateRequest(InitiateTransactionRequest validateRequest) {
         Optional<Users> borrower = userRepository.findById(validateRequest.getBorrowerId());
         Optional<Users> lender = userRepository.findById(validateRequest.getLenderId());
         List<Transaction> previousBorrower = transactionRepository.findByBorrowerId(validateRequest.getBorrowerId());
 
+        if("BLACKLIST".equalsIgnoreCase(borrower.get().getCheckBlacklist())){
+            throw new CustomException(400,"Borrower is blacklisted");
+        }
         if (borrower.isEmpty() ) {
-            throw new CustomException("Borrower not found. Enter borrower id properly");
+            throw new CustomException(400,"Borrower not found. Enter borrower id properly");
         }
         if (lender.isEmpty()) {
-            throw new CustomException("Lender Not Found. Enter lender id properly");
+            throw new CustomException(400,"Lender Not Found. Enter lender id properly");
         }
         if(lender.get().getCheckStatus().equals("Pending")){
-            throw  new CustomException("Lender has pending status. It must be verified first");
+            throw  new CustomException(400,"Lender has pending status. It must be verified first");
         }
         if(lender.get().getCheckStatus().equals("Rejected")){
-            throw  new CustomException("Lender has Rejected status. It must be verified first");
+            throw  new CustomException(400,"Lender has Rejected status. It must be verified first");
         }
         if(borrower.get().getCheckStatus().equals("Pending")) {
-            throw new CustomException("Borrower has pending status. It must be verified first");
+            throw new CustomException(400,"Borrower has pending status. It must be verified first");
         }
         if(borrower.get().getCheckStatus().equals("Rejected")) {
-            throw new CustomException("Borrower has Rejected status. It must be verified first");
+            throw new CustomException(400,"Borrower has Rejected status. It must be verified first");
         }
         if (!("LENDER".equalsIgnoreCase(lender.get().getUserRole().name()))) {
-            throw new CustomException("Lender id must be of lender role user");
+            throw new CustomException(400,"Lender id must be of lender role user");
         }
         if (!("BORROWER".equalsIgnoreCase(borrower.get().getUserRole().name()))) {
-            throw new CustomException("Borrower id must be of borrower role User");
+            throw new CustomException(400,"Borrower id must be of borrower role User");
         }
         if(!previousBorrower.isEmpty() && "PENDING".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
-            throw new CustomException("Borrower have already initiated amounts with Lender");
+            throw new CustomException(400,"Borrower have already initiated amounts with Lender");
         }
         if(!previousBorrower.isEmpty() && "UNPAID".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
-            throw new CustomException("Borrower status is still unpaid");
+            throw new CustomException(400,"Borrower status is still unpaid");
         }
         if(!previousBorrower.isEmpty() && "PARTIAL_PAID".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
-            throw new CustomException("Borrower status is still partial paid");
+            throw new CustomException(400,"Borrower status is still partial paid");
         }
         if(!previousBorrower.isEmpty() && "REJECTED".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
-            throw new CustomException("Borrower is rejected");
+            throw new CustomException(400,"Borrower is rejected");
         }
 
 
