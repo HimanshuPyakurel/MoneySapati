@@ -5,6 +5,8 @@ import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.serde.annotation.Serdeable;
 
+import java.time.LocalDateTime;
+
 @Serdeable
 @Introspected
 @MappedEntity(schema = "public")
@@ -17,17 +19,19 @@ public class CashDetails {
     private double borrowerAmountToPay;
     private double totalLenderAvailableAmount;
     private String status;
+    private LocalDateTime approvedAt;
 
     public CashDetails() {};
 
-    public CashDetails(int id, int borrowerId, int lenderId,
-                       double borrowerAmountToPay, double totalLenderAvailableAmount, String status) {
+    public CashDetails(int id, int borrowerId, int lenderId, double borrowerAmountToPay,
+                       double totalLenderAvailableAmount, String status, LocalDateTime approvedAt) {
         this.id = id;
         this.borrowerId = borrowerId;
         this.lenderId = lenderId;
         this.borrowerAmountToPay = borrowerAmountToPay;
         this.totalLenderAvailableAmount = totalLenderAvailableAmount;
         this.status = status;
+        this.approvedAt = approvedAt;
     }
 
     public int getId() {
@@ -76,5 +80,13 @@ public class CashDetails {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public LocalDateTime getApprovedAt() {
+        return approvedAt;
+    }
+
+    public void setApprovedAt(LocalDateTime approvedAt) {
+        this.approvedAt = approvedAt;
     }
 }

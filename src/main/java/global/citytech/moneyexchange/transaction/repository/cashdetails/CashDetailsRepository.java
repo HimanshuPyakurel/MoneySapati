@@ -7,11 +7,12 @@ import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @JdbcRepository(dialect = Dialect.POSTGRES)
 public interface CashDetailsRepository extends CrudRepository<CashDetails,Integer> {
     List<CashDetails> findByBorrowerId(int borrowerId);
+    Optional<CashDetails> findByBorrowerIdIn(int borrowerId);
     List<CashDetails> findByLenderId(int lenderId);
-    List<CashDetails> findByStatus(String status);
 }
