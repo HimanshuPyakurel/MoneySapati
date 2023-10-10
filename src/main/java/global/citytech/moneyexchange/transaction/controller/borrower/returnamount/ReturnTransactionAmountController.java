@@ -1,6 +1,6 @@
 package global.citytech.moneyexchange.transaction.controller.borrower.returnamount;
 
-import global.citytech.moneyexchange.response.CustomResponse;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
 import global.citytech.moneyexchange.transaction.service.borrower.returntransactionamount.ReturnTransactionAmountRequest;
 import global.citytech.moneyexchange.transaction.service.borrower.returntransactionamount.ReturnTransactionAmountService;
 import io.micronaut.http.annotation.Body;
