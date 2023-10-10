@@ -1,8 +1,6 @@
 package global.citytech.moneyexchange.transaction.controller.lender.rejectborrower;
 
-import global.citytech.moneyexchange.response.CustomResponse;
-import global.citytech.moneyexchange.transaction.service.lender.approveborrower.ApproveBorrowerService;
-import global.citytech.moneyexchange.transaction.service.lender.approveborrower.ApprovedTransactionRequest;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
 import global.citytech.moneyexchange.transaction.service.lender.rejectborrower.RejectBorrowerRequest;
 import global.citytech.moneyexchange.transaction.service.lender.rejectborrower.RejectBorrowerService;
 import io.micronaut.http.annotation.Body;
