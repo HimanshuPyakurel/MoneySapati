@@ -1,6 +1,5 @@
 package global.citytech.moneyexchange.transaction.controller.listdetails;
 
-import global.citytech.moneyexchange.response.CustomResponse;
 import global.citytech.moneyexchange.transaction.service.listdetails.ListDetailsRequest;
 import global.citytech.moneyexchange.transaction.service.listdetails.ListDetailsService;
 import io.micronaut.http.annotation.Body;
