@@ -8,8 +8,10 @@ import io.micronaut.serde.annotation.Serdeable;
 public class VerifyUserRequest {
 
     private int userId;
-    private String adminEmail;
-    private String adminPassword;
+
+    public VerifyUserRequest(int userId) {
+        this.userId = userId;
+    }
 
     public int getUserId() {
         return userId;
@@ -17,28 +19,6 @@ public class VerifyUserRequest {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getAdminEmail() {
-        return adminEmail;
-    }
-
-    public void setAdminEmail(String adminEmail) {
-        this.adminEmail = adminEmail;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
-    }
-
-    public void setAdminPassword(String adminPassword) {
-        this.adminPassword = adminPassword;
-    }
-
-    public VerifyUserRequest(int userId, String adminEmail, String adminPassword) {
-        this.userId = userId;
-        this.adminEmail = adminEmail;
-        this.adminPassword = adminPassword;
     }
 
     public VerifyUserRequest(){};
