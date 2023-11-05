@@ -2,6 +2,8 @@ package global.citytech.moneyexchange.admin.service.verifyuser;
 
 import global.citytech.moneyexchange.platform.response.CustomResponse;
 
+import java.util.Optional;
+
 public interface VerifyUserService {
-    CustomResponse verifyUser(VerifyUserRequest verifyUserRequest);
+    Optional<VerifyUserResponse> verifyUser(VerifyUserRequest verifyUserRequest);
 }
