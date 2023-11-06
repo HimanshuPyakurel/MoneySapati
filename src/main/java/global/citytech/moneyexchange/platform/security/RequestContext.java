@@ -5,8 +5,6 @@ import io.soabase.recordbuilder.core.RecordBuilder;
 @RecordBuilder
 public record RequestContext(String email,
                              String userRole,
-                             String userID,
-                             String userStatus,
-                             String checkBlacklist
+                             int userID
 ) {
 }
