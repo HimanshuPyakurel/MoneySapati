@@ -44,7 +44,19 @@ public class SecurityFilter implements HttpServerFilter {
             if (request.getPath().contains("user/login")) {
                 return chain.proceed(request);
             }
-            if (request.getPath().contains("/user/get")) {
+            if (request.getPath().contains("/borrower/request")) {
+                return chain.proceed(request);
+            }
+            if (request.getPath().contains("/borrower/return")) {
+                return chain.proceed(request);
+            }
+            if (request.getPath().contains("/lender/approve")) {
+                return chain.proceed(request);
+            }
+            if (request.getPath().contains("/user/transaction-list")) {
+                return chain.proceed(request);
+            }
+            if (request.getPath().contains("/lender/rate-borrower")) {
                 return chain.proceed(request);
             }
 
