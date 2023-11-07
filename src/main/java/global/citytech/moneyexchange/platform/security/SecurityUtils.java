@@ -22,9 +22,9 @@ public class SecurityUtils {
     public SecurityUtils() {
     }
 
-    public String token(int userId, String email, String userRole,String userStatus,String blacklist) {
+    public String token(int userId, String email, String userRole) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.putAll(prepareRequestBody(userId,email, userRole,userStatus,blacklist));
+        claims.putAll(prepareRequestBody(userId,email, userRole));
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 12);
         return Jwts.builder()
@@ -43,29 +43,25 @@ public class SecurityUtils {
         return Keys.hmacShaKeyFor(jwtSignature.getBytes(StandardCharsets.UTF_8));
     }
 
-    private Map<String, Object> prepareRequestBody(int userId,String email, String userRole,String userStatus,String blacklist) {
+    private Map<String, Object> prepareRequestBody(int userId,String email, String userRole) {
         Map<String, Object> requestBody = new HashMap<>();
-//        requestBody.put("email", email);
+        requestBody.put("email", email);
         requestBody.put("userId", userId);
         requestBody.put("userRole", userRole);
-        requestBody.put("userStatus", userStatus);
-        requestBody.put("checkBlacklist", blacklist);
         return requestBody;
     }
 
     public RequestContext parseTokenAndGetContext(String token) {
-        try {
+        if(token!=null){
             Claims claims = this.parseToken(token);
-            RequestContextBuilder contextBuilder = RequestContextBuilder.builder();
-            contextBuilder.email(claims.get("email", String.class));
-            contextBuilder.userID(claims.get("userId", String.class));
-            contextBuilder.userRole(claims.get("userRole", String.class));
+            RequestContextBuilder contextBuilder = RequestContextBuilder.builder()
+            .email(claims.get("email", String.class))
+                    .userID(claims.get("userId", Integer.class))
+            .userRole(claims.get("userRole", String.class));
             return contextBuilder.build();
 
-        } catch (Exception exception) {
-            if (exception instanceof ExpiredJwtException)
-                throw new IllegalArgumentException("Security Token is expired");
-            throw new IllegalArgumentException("Security Token is invalid");
+        } else{
+            throw new IllegalArgumentException("Token is expired");
         }
     }
 
