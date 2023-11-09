@@ -8,7 +8,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
 
-@Controller("/transaction")
+@Controller("/borrower")
 public class InitiateTransactionController {
 
     public final InitiateTransactionService initiateTransactionService;
