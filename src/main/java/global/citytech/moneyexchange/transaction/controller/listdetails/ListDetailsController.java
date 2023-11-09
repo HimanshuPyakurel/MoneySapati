@@ -19,7 +19,7 @@ public class ListDetailsController {
         this.listDetailsService = listDetailsService;
     }
 
-    @Post("/list")
+    @Post("/transaction-list")
     public List listUser(@Body ListDetailsRequest request){
         return listDetailsService.listDetails(request);
     }
