@@ -17,7 +17,7 @@ public class ApprovedBorrowerTransactionController {
         this.approveBorrowerService = approveBorrowerService;
     }
 
-    @Post("/verify")
+    @Post("/approve")
     public CustomResponse approveBorrowerRequest(@Body ApprovedTransactionRequest request){
         approveBorrowerService.approvedTransaction(request);
         return new CustomResponse("Successfully approved borrower requested money",true);
