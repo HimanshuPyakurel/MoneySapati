@@ -1,11 +1,13 @@
 package global.citytech.moneyexchange.user.controller.getAll;
 
+import global.citytech.moneyexchange.platform.response.RestResponse;
+import global.citytech.moneyexchange.platform.security.ContextHolder;
 import global.citytech.moneyexchange.user.repository.Users;
 import global.citytech.moneyexchange.user.service.getall.UserGetAllRequest;
 import global.citytech.moneyexchange.user.service.getall.UserGetAllService;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
+import global.citytech.moneyexchange.user.service.login.UserLoginRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 
 import java.util.List;
@@ -19,8 +21,10 @@ public class GetAllController {
         this.userGetAllService = userGetAllService;
     }
 
-    @Post("/get")
-    public List<Users> getAllUsers(@Body UserGetAllRequest request) {
-        return userGetAllService.getAllUsers(request);
+    @Get("/get")
+    public HttpResponse<RestResponse> getUser() {
+        var response =  userGetAllService.getAllUsers();
+        return HttpResponse.ok(RestResponse.success(response));
     }
+
 }
