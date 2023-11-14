@@ -52,22 +52,26 @@ public class InitiateTransactionRequestServiceImpl implements InitiateTransactio
         if("BLACKLIST".equalsIgnoreCase(borrower.get().getCheckBlacklist())){
             throw new CustomException(400,"Borrower is blacklisted");
         }
+        if("BLACKLIST".equalsIgnoreCase(lender.get().getCheckBlacklist())){
+            throw new CustomException(400,"Lender is blacklisted");
+        }
+
         if (borrower.isEmpty() ) {
             throw new CustomException(400,"Borrower not found. Enter borrower id properly");
         }
         if (lender.isEmpty()) {
             throw new CustomException(400,"Lender Not Found. Enter lender id properly");
         }
-        if(lender.get().getCheckStatus().equals("Pending")){
+        if(lender.get().getCheckStatus().equals(StatusAndRoleEnum.PENDING.name())){
             throw  new CustomException(400,"Lender has pending status. It must be verified first");
         }
-        if(lender.get().getCheckStatus().equals("Rejected")){
+        if(lender.get().getCheckStatus().equals(StatusAndRoleEnum.REJECTED.name())){
             throw  new CustomException(400,"Lender has Rejected status. It must be verified first");
         }
-        if(borrower.get().getCheckStatus().equals("Pending")) {
+        if(borrower.get().getCheckStatus().equals(StatusAndRoleEnum.PENDING.name())) {
             throw new CustomException(400,"Borrower has pending status. It must be verified first");
         }
-        if(borrower.get().getCheckStatus().equals("Rejected")) {
+        if(borrower.get().getCheckStatus().equals(StatusAndRoleEnum.REJECTED.name())) {
             throw new CustomException(400,"Borrower has Rejected status. It must be verified first");
         }
         if (!("LENDER".equalsIgnoreCase(lender.get().getUserRole().name()))) {
@@ -87,6 +91,9 @@ public class InitiateTransactionRequestServiceImpl implements InitiateTransactio
         }
         if(!previousBorrower.isEmpty() && "REJECTED".equalsIgnoreCase(previousBorrower.get(0).getTransactionStatus())){
             throw new CustomException(400,"Borrower is rejected");
+        }
+        if(validateRequest.getRequestAmount() <= 200){
+            throw new CustomException(400,"Requested Amount must be greater than 200");
         }
 
 
