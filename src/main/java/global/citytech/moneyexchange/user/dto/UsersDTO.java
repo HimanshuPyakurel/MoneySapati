@@ -1,6 +1,6 @@
 package global.citytech.moneyexchange.user.dto;
 
-import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
+import global.citytech.moneyexchange.platform.constraints.StatusAndRoleEnum;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 
