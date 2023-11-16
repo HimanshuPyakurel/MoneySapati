@@ -1,6 +1,6 @@
 package global.citytech.moneyexchange.user.repository;
 
-import global.citytech.moneyexchange.constraints.StatusAndRoleEnum;
+import global.citytech.moneyexchange.platform.constraints.StatusAndRoleEnum;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
 import io.micronaut.data.model.query.builder.sql.Dialect;
