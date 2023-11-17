@@ -1,0 +1,386 @@
+{
+	"info": {
+		"_postman_id": "9842556e-bd4b-4deb-8d23-5a81327bc0c3",
+		"name": "Himanshu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28340666"
+	},
+	"item": [
+		{
+			"name": "MoneySapati",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "AdminVerifyUser",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-XSRF-TOKEN",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"6459\",\r\n    \"adminEmail\" : \"himansupyakurel90@gmail.com\",\r\n    \"adminPassword\":\"1456234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/user/verify",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"verify"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "AdminRejectUser",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-XSRF-TOKEN",
+										"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1AZ21haWwuY29tIiwidXNlclJvbGUiOiJMRU5ERVIiLCJ1c2VySWQiOjc1MywiZW1haWwiOiJyYW1AZ21haWwuY29tIiwiZXhwIjoxNjk2NTczNzE2fQ.WUbQanewURZtwRU7P3S7thYLXCWgecPiJaCVP11H5z8",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"8596\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/user/reject",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"reject"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "UserSignup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"rara\",\r\n    \"lastName\": \"rara\",\r\n    \"email\": \"rara@gmail.com\",\r\n    \"citizenship\": \"Nepali\",\r\n    \"userName\": \"hero\",\r\n    \"password\": \"1456234aA@\",\r\n    \"userRole\": \"Borrower\",\r\n    \"availableBalance\": \"800\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/user/signup",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UserLogin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"himansupyakurel90@gmail.com\",\r\n    \"password\": \"1456234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/user/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetUser",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-XSRF-TOKEN",
+										"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1AZ21haWwuY29tIiwidXNlclJvbGUiOiJMRU5ERVIiLCJ1c2VySWQiOjc1MywiZXhwIjoxNjk2NTY1ODM1fQ.6BIvfybe9-1GILE3F3eWGmUZtVxnNIzj9kr40pIkUkM",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/user/get",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"get"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Borrower",
+					"item": [
+						{
+							"name": "BorrowerRequest",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"borrowerId\": \"7334\",\r\n    \"lenderId\": \"1625\", \r\n    \"requestAmount\": \"500\",\r\n    \"interestRate\": \"10\",\r\n    \"borrowingPeriod\": \"365\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/borrower/request",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"borrower",
+										"request"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "BorrowerReturnMoney",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cashId\":\"7660\",\r\n    \"borrowerId\": \"7334\",\r\n    \"lenderId\": \"1625\",\r\n    \"returningAmount\":\"1000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/borrower/return",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"borrower",
+										"return"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Lender",
+					"item": [
+						{
+							"name": "LenderVerify",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"transactionId\": \"8166\",\r\n    \"borrowerId\": \"8596\",\r\n    \"lenderId\": \"1625\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/lender/approve",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"lender",
+										"approve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "LenderReject",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"transactionId\": \"6162\",\r\n    \"borrowerId\": \"6451\",\r\n    \"lenderId\": \"3180\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/lender/reject",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"lender",
+										"reject"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ListTransaction",
+					"item": [
+						{
+							"name": "ListUser",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\":\"7334\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/user/transaction-list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"transaction-list"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Rating",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"borrowerId\": \"9593\",\r\n    \"lenderId\": \"1625\",\r\n    \"rating\": \"0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/lender/rate-borrower",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"lender",
+								"rate-borrower"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
