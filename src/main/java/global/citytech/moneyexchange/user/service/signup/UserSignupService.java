@@ -1,10 +1,10 @@
 package global.citytech.moneyexchange.user.service.signup;
 
-import global.citytech.moneyexchange.response.CustomResponse;
-import global.citytech.moneyexchange.user.repository.Users;
-import global.citytech.moneyexchange.user.dto.UsersDTO;
+import global.citytech.moneyexchange.platform.response.CustomResponse;
+
+import java.util.Optional;
 
 public interface UserSignupService {
 
-    CustomResponse signup(UsersDTO usersDto);
+    Optional<UserSignupResponse> signup(UserSignupRequest request);
 }
